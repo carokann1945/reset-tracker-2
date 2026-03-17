@@ -4,7 +4,7 @@ export type Tab = {
   position: number;
 };
 
-export type AppState = {
+export type TabState = {
   version: 1;
   tabs: Tab[];
   activeTabId: string | null;

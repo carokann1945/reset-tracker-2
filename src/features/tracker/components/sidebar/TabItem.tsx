@@ -12,7 +12,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import type { Tab } from '../../model/types';
-import { useAppStore } from '../../model/store';
+import { useTabStore } from '../../model/tabStore';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,7 +31,7 @@ type TabItemProps = {
 };
 
 export default function TabItem({ tab, onTabSelect }: TabItemProps) {
-  const { state, deleteTab, renameTab } = useAppStore();
+  const { state, deleteTab, renameTab } = useTabStore();
   const isActive = state.activeTabId === tab.id;
   const { attributes, listeners, setActivatorNodeRef, setNodeRef, transform, transition, isDragging } = useSortable({
     id: tab.id,

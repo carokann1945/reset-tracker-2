@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
-import { useAppStore } from '../model/store';
+import { useTabStore } from '../model/tabStore';
 import Sidebar from './sidebar/Sidebar';
 import Header from './Header';
 
@@ -12,7 +12,7 @@ export default function TrackerShell() {
   const [isDesktop, setIsDesktop] = useState(false);
   // 초기렌더링 트렌지션 제어
   const [isMounted, setIsMounted] = useState(false);
-  const { state, setActiveTab } = useAppStore();
+  const { state, setActiveTab } = useTabStore();
   const activeTabName = state.tabs.find((tab) => tab.id === state.activeTabId)?.name ?? '선택된 탭 없음';
 
   const handleTabSelect = (tabId: string) => {

@@ -15,7 +15,7 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
-import { useAppStore } from '../../model/store';
+import { useTabStore } from '../../model/tabStore';
 import { cn } from '@/lib/utils';
 import TabItem from './TabItem';
 
@@ -24,7 +24,7 @@ type TabListProps = {
 };
 
 export default function TabList({ onTabSelect }: TabListProps) {
-  const { state, reorderTabs } = useAppStore();
+  const { state, reorderTabs } = useTabStore();
 
   const tabs = [...state.tabs].sort((a, b) => a.position - b.position);
   const tabIds = tabs.map((tab) => tab.id);

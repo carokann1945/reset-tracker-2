@@ -11,13 +11,13 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { useAppStore } from '../../model/store';
+import { useTabStore } from '../../model/tabStore';
 import { cn } from '@/lib/utils';
 import type { SubmitEventHandler } from 'react';
 import { useState } from 'react';
 
 export default function TabButton() {
-  const { addTab } = useAppStore();
+  const { addTab } = useTabStore();
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
 

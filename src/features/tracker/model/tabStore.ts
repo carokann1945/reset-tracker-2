@@ -22,7 +22,7 @@ const EMPTY_STATE: TabState = {
   activeTabId: null,
 };
 
-// 버전 검증, position으로 정렬, 활성화된 탭 유효성 체크
+// 헬퍼 함수 - 버전 검증, position으로 정렬, 활성화된 탭 유효성 체크
 function normalizeState(saved: TabState | null | undefined): TabState {
   const validated = saved && saved.version === 1 ? saved : EMPTY_STATE;
   const sorted = [...validated.tabs].sort((a, b) => a.position - b.position);
@@ -72,13 +72,13 @@ export const useTabStore = create<TabStore>((set, get) => ({
 
   renameTab: (tabId, name) =>
     set((store) => {
-      const nextName = name.trim();
-      if (!nextName) return store;
+      const newName = name.trim();
+      if (!newName) return store;
 
       return {
         state: {
           ...store.state,
-          tabs: store.state.tabs.map((tab) => (tab.id === tabId ? { ...tab, name: nextName } : tab)),
+          tabs: store.state.tabs.map((tab) => (tab.id === tabId ? { ...tab, name: newName } : tab)),
         },
       };
     }),
@@ -86,7 +86,6 @@ export const useTabStore = create<TabStore>((set, get) => ({
   deleteTab: (tabId) =>
     set((store) => {
       const tabs = store.state.tabs.filter((tab) => tab.id !== tabId);
-
       const activeTabId = store.state.activeTabId === tabId ? (tabs[0]?.id ?? null) : store.state.activeTabId;
 
       return {
@@ -98,12 +97,10 @@ export const useTabStore = create<TabStore>((set, get) => ({
       };
     }),
 
-  reorderTabs: (nextOrderedIds) =>
+  reorderTabs: (orderedIds) =>
     set((store) => {
-      if (nextOrderedIds.length !== store.state.tabs.length) return store;
-
       const tabsById = new Map(store.state.tabs.map((tab) => [tab.id, tab]));
-      const reorderedTabs = nextOrderedIds.map((tabId, index) => {
+      const reorderedTabs = orderedIds.map((tabId, index) => {
         const tab = tabsById.get(tabId);
         if (!tab) return null;
         return { ...tab, position: index };

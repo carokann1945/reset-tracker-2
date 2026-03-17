@@ -1,5 +1,0 @@
-export function uid(): string {
-  const c = typeof crypto !== 'undefined' ? crypto : undefined;
-  if (c && typeof c.randomUUID === 'function') return c.randomUUID();
-  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
-}

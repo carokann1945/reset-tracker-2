@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useMemo, useReducer, useState } from 'react';
 import type { AppState, Tab } from './types';
-import { uid } from '@/lib/id';
+import { uid } from '@/lib/utils';
 import { loadState, saveState } from './storage';
 
 type AppStore = {

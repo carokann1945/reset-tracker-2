@@ -4,15 +4,12 @@ import { PanelLeft } from 'lucide-react';
 import Image from 'next/image';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import TabButton from './TabButton';
+import { useSidebarStore } from '../../model/sidebarStore';
 
-type SidebarProps = {
-  isOpen: boolean;
-  setIsOpen: (value: boolean) => void;
-  isMounted: boolean;
-  onTabSelect: (tabId: string) => void;
-};
+export default function Sidebar() {
+  const isOpen = useSidebarStore((store) => store.isOpen);
+  const setIsOpen = useSidebarStore((store) => store.setIsOpen);
 
-export default function Sidebar({ isOpen, setIsOpen, isMounted, onTabSelect }: SidebarProps) {
   return (
     <aside
       className={cn(
@@ -22,10 +19,10 @@ export default function Sidebar({ isOpen, setIsOpen, isMounted, onTabSelect }: S
         'fixed top-0 left-0',
         'bg-white text-black border border-gray-200',
         'translate-x-full',
-        isMounted && 'transition-transform duration-300',
+        'transition-transform duration-300',
         isOpen ? 'translate-x-0' : '-translate-x-full',
       )}>
-      {/* 사이트 로고 제목 */}
+      {/* 사이트 로고 */}
       <div className={cn('w-full h-[40px]', 'flex justify-between items-center', 'mb-[20px]')}>
         <div className={cn('w-[250px]', 'flex items-center gap-[8px]')}>
           <figure className={cn('w-[30px] h-[30px]', 'relative')}>
@@ -56,7 +53,7 @@ export default function Sidebar({ isOpen, setIsOpen, isMounted, onTabSelect }: S
       </div>
       <div className="flex-1 min-h-0">
         <ScrollArea className="h-full">
-          <TabList onTabSelect={onTabSelect} />
+          <TabList />
         </ScrollArea>
       </div>
     </aside>

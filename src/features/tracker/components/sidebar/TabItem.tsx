@@ -24,13 +24,14 @@ import { cn } from '@/lib/utils';
 import { GripVertical, MoreHorizontal } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import type { SubmitEventHandler, MouseEvent } from 'react';
+import { useSidebarStore, handleTabSelect } from '../../model/sidebarStore';
 
 type TabItemProps = {
   tab: Tab;
-  onTabSelect: (tabId: string) => void;
 };
 
-export default function TabItem({ tab, onTabSelect }: TabItemProps) {
+export default function TabItem({ tab }: TabItemProps) {
+  const {} = useSidebarStore();
   const { state, deleteTab, renameTab } = useTabStore();
   const isActive = state.activeTabId === tab.id;
   const { attributes, listeners, setActivatorNodeRef, setNodeRef, transform, transition, isDragging } = useSortable({
@@ -90,7 +91,7 @@ export default function TabItem({ tab, onTabSelect }: TabItemProps) {
   return (
     <Dialog open={renameDialogOpen} onOpenChange={handleRenameDialogOpenChange}>
       <li
-        onClick={() => onTabSelect(tab.id)}
+        onClick={() => handleTabSelect(tab.id)}
         ref={setNodeRef}
         style={style}
         className={cn(

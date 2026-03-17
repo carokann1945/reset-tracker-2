@@ -19,11 +19,7 @@ import { useTabStore } from '../../model/tabStore';
 import { cn } from '@/lib/utils';
 import TabItem from './TabItem';
 
-type TabListProps = {
-  onTabSelect: (tabId: string) => void;
-};
-
-export default function TabList({ onTabSelect }: TabListProps) {
+export default function TabList() {
   const { state, reorderTabs } = useTabStore();
 
   const tabs = [...state.tabs].sort((a, b) => a.position - b.position);
@@ -51,7 +47,7 @@ export default function TabList({ onTabSelect }: TabListProps) {
         <SortableContext items={tabIds} strategy={verticalListSortingStrategy}>
           <ul>
             {tabs.map((tab) => (
-              <TabItem key={tab.id} tab={tab} onTabSelect={onTabSelect} />
+              <TabItem key={tab.id} tab={tab} />
             ))}
           </ul>
         </SortableContext>

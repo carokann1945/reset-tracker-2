@@ -2,7 +2,7 @@
 
 import { create } from 'zustand';
 import type { TabState, Tab } from './types';
-import { loadState } from './storage';
+import { loadState } from './tabStorage';
 import { uid } from '@/lib/utils';
 
 type TabStore = {

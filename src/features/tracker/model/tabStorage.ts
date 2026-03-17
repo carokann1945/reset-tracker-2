@@ -1,9 +1,9 @@
 'use client';
 
-import type { AppState } from './types';
+import type { TabState } from './types';
 export const STORAGE_KEY = 'tabs-todolist:v1';
 
-export function loadState(): AppState | null {
+export function loadState(): TabState | null {
   if (typeof window === 'undefined') return null;
 
   try {
@@ -13,7 +13,7 @@ export function loadState(): AppState | null {
     const parsed = JSON.parse(raw) as unknown;
     if (!parsed || typeof parsed !== 'object') return null;
 
-    const state = parsed as AppState;
+    const state = parsed as TabState;
     if (state.version !== 1) return null;
     if (!Array.isArray(state.tabs)) return null;
 
@@ -23,7 +23,7 @@ export function loadState(): AppState | null {
   }
 }
 
-export function saveState(state: AppState) {
+export function saveState(state: TabState) {
   if (typeof window === 'undefined') return;
 
   try {

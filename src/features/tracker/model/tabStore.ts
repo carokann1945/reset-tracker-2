@@ -35,6 +35,10 @@ function normalizeState(saved: TabState | null | undefined): TabState {
   };
 }
 
+// 일반 함수 - 액티브 탭 이름 반환
+export const selectActiveTabName = (store: TabStore) =>
+  store.state.tabs.find((tab) => tab.id === store.state.activeTabId)?.name ?? '선택된 탭 없음';
+
 export const useTabStore = create<TabStore>((set, get) => ({
   state: EMPTY_STATE,
   hydrated: false,

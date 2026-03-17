@@ -1,13 +1,14 @@
 import { cn } from '@/lib/utils';
 import { PanelLeft } from 'lucide-react';
+import { useTabStore, selectActiveTabName } from '../model/tabStore';
 
 type HeaderProps = {
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
-  activeTabName: string;
 };
 
-export default function Header({ isOpen, setIsOpen, activeTabName }: HeaderProps) {
+export default function Header({ isOpen, setIsOpen }: HeaderProps) {
+  const activeTabName = useTabStore(selectActiveTabName);
   return (
     <header
       className={cn(

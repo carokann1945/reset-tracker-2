@@ -11,7 +11,7 @@ export type TabState = {
   activeTabId: string | null;
 };
 
-// todo 타입
+// task 타입
 export type SimpleTask = {
   id: string;
   tabId: string;
@@ -52,7 +52,7 @@ export type TaskState = {
   tasks: Task[];
 };
 
-// 폼에서 입력중인 상태를 담는 타입. id, createdAt, 이런 폼에서 입력할 수 없는건 빠져있음
+// 폼에서 입력중인 상태를 담는 임시 타입. id, createdAt, 이런 폼에서 입력할 수 없는건 빠져있음
 export type TaskDraft =
   | {
       kind: 'simple';

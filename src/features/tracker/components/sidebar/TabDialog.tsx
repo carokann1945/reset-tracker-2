@@ -34,16 +34,14 @@ export default function TabDialog({
 }: TabDialogProps) {
   const [name, setName] = useState(defaultName);
 
-  const handleOpenChange = (nextOpen: boolean) => {
-    onOpenChange(nextOpen);
+  const handleOpenChange = (isOpen: boolean) => {
+    onOpenChange(isOpen);
     setName(defaultName);
   };
 
   const handleSubmit: SubmitEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    const trimmedName = name.trim();
-    if (!trimmedName) return;
-    onSubmit(trimmedName);
+    onSubmit(name.trim());
     handleOpenChange(false);
   };
 

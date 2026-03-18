@@ -34,19 +34,14 @@ export default function TabDialog({
 }: TabDialogProps) {
   const [name, setName] = useState(defaultName);
 
-  const handleOpenChange = (isOpen: boolean) => {
-    onOpenChange(isOpen);
-    setName(defaultName);
-  };
-
   const handleSubmit: SubmitEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     onSubmit(name.trim());
-    handleOpenChange(false);
+    onOpenChange(false);
   };
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <form onSubmit={handleSubmit} className="grid gap-4">
           <DialogHeader>
@@ -61,7 +56,7 @@ export default function TabDialog({
             aria-label="탭 이름"
           />
           <DialogFooter className="mt-2">
-            <Button type="button" variant="outline" onClick={() => handleOpenChange(false)}>
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               취소
             </Button>
             <Button type="submit" disabled={!name.trim()}>

@@ -68,15 +68,17 @@ export default function TabItem({ tab }: TabItemProps) {
           onDelete={() => deleteTab(tab.id)}
         />
       </li>
-      <TabDialog
-        open={tabDialogOpen}
-        onOpenChange={setTabDialogOpen}
-        onSubmit={(name) => renameTab(tab.id, name)}
-        title="탭 이름 수정"
-        description="변경할 탭 이름을 입력하세요."
-        submitLabel="저장"
-        defaultName={tab.name}
-      />
+      {tabDialogOpen && (
+        <TabDialog
+          open={tabDialogOpen}
+          onOpenChange={setTabDialogOpen}
+          onSubmit={(name) => renameTab(tab.id, name)}
+          title="탭 이름 수정"
+          description="변경할 탭 이름을 입력하세요."
+          submitLabel="저장"
+          defaultName={tab.name}
+        />
+      )}
     </>
   );
 }

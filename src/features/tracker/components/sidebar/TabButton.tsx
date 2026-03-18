@@ -23,14 +23,16 @@ export default function TabButton() {
         )}>
         +
       </button>
-      <TabDialog
-        open={tabDialogOpen}
-        onOpenChange={setTabDialogOpen}
-        onSubmit={addTab}
-        title="새 탭 만들기"
-        description="추가할 탭 이름을 입력하세요."
-        submitLabel="추가"
-      />
+      {tabDialogOpen && (
+        <TabDialog
+          open={tabDialogOpen}
+          onOpenChange={setTabDialogOpen}
+          onSubmit={addTab}
+          title="새 탭 만들기"
+          description="추가할 탭 이름을 입력하세요."
+          submitLabel="추가"
+        />
+      )}
     </>
   );
 }

@@ -75,7 +75,7 @@ export const useTabStore = create<TabStore>((set, get) => ({
 
   deleteTab: (tabId) =>
     set((store) => {
-      const tabs = store.state.tabs.filter((tab) => tab.id !== tabId);
+      const tabs = store.state.tabs.filter((tab) => tab.id !== tabId).map((tab, i) => ({ ...tab, position: i }));
       const activeTabId = store.state.activeTabId === tabId ? (tabs[0]?.id ?? null) : store.state.activeTabId;
 
       return {

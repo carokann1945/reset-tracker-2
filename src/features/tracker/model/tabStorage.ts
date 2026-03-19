@@ -1,6 +1,5 @@
-'use client';
-
 import type { TabState } from './types';
+
 export const STORAGE_KEY = 'reset-tracker-tabs:v1';
 
 export function loadState(): TabState | null {

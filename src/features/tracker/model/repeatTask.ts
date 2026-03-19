@@ -79,6 +79,6 @@ export function syncRepeatTask(task: RepeatTask, now = getNow(task.timezone)): R
     checks: Array(task.targetCount).fill(false),
     completedAt: undefined,
     lastCycle: currentCycle,
-    updatedAt: Date.now(),
+    updatedAt: Temporal.Now.instant().toString(),
   };
 }

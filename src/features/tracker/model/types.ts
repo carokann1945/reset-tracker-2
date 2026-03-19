@@ -21,7 +21,7 @@ export type SimpleTask = {
   checks: [boolean];
   completedAt?: string;
   position: number;
-  updatedAt: number;
+  updatedAt: string;
 };
 
 export type RepeatTask = {
@@ -42,7 +42,7 @@ export type RepeatTask = {
   // 현재 체크들이 속한 "주기(cycle)" 인덱스 (자동 리셋용)
   lastCycle: number;
   position: number;
-  updatedAt: number;
+  updatedAt: string;
 };
 
 export type Task = SimpleTask | RepeatTask;

@@ -101,7 +101,7 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
 
       if (draft.kind === 'simple') {
         const checked = prev.kind === 'simple' ? prev.checks[0] : false;
-        next = { ...base, kind: 'simple', checks: [checked] };
+        next = { ...base, kind: 'simple', checks: [checked], completedAt: checked ? prev.completedAt : undefined };
       } else {
         const configChanged =
           prev.kind !== 'repeat' ||

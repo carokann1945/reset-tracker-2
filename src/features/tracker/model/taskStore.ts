@@ -10,6 +10,7 @@ type TaskStore = {
   hydrated: boolean;
   hydrate: () => void;
   syncTasks: () => void;
+  reorderTasks: (tabId: string, orderedIds: string[]) => void;
   addTask: (tabId: string, draft: TaskDraft) => void;
   updateTask: (taskId: string, draft: TaskDraft) => void;
   deleteTask: (taskId: string) => void;
@@ -42,6 +43,24 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
   },
 
   syncTasks: () => set((store) => ({ state: normalizeState(store.state) })),
+
+  reorderTasks: (tabId, orderedIds) =>
+    set((store) => {
+      const targetTasks = store.state.tasks.filter((task) => task.tabId === tabId);
+      const tasksById = new Map(targetTasks.map((task) => [task.id, task]));
+      const reorderedTasks = orderedIds.map((taskId, index) => ({
+        ...tasksById.get(taskId)!,
+        position: index,
+      }));
+      const reorderedById = new Map(reorderedTasks.map((task) => [task.id, task]));
+
+      return {
+        state: {
+          ...store.state,
+          tasks: store.state.tasks.map((task) => (task.tabId === tabId ? reorderedById.get(task.id)! : task)),
+        },
+      };
+    }),
 
   addTask: (tabId, draft) =>
     set((store) => {

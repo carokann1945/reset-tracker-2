@@ -492,6 +492,50 @@ describe('taskStore', () => {
     });
   });
 
+  describe('reorderTasks', () => {
+    it('같은 탭 안에서만 순서를 바꾸고 다른 탭 task는 그대로 둔다', async () => {
+      const { useTaskStore } = await setupStore();
+
+      seedState(useTaskStore, [
+        makeSimpleTask({ id: 'tab1-0', tabId: 'tab-1', position: 0 }),
+        makeSimpleTask({ id: 'tab1-1', tabId: 'tab-1', position: 1 }),
+        makeSimpleTask({ id: 'tab1-2', tabId: 'tab-1', position: 2 }),
+        makeSimpleTask({ id: 'tab2-0', tabId: 'tab-2', position: 0 }),
+      ]);
+
+      useTaskStore.getState().reorderTasks('tab-1', ['tab1-2', 'tab1-0', 'tab1-1']);
+
+      expect(useTaskStore.getState().state.tasks).toMatchObject([
+        { id: 'tab1-0', tabId: 'tab-1', position: 1 },
+        { id: 'tab1-1', tabId: 'tab-1', position: 2 },
+        { id: 'tab1-2', tabId: 'tab-1', position: 0 },
+        { id: 'tab2-0', tabId: 'tab-2', position: 0 },
+      ]);
+    });
+
+    it('재정렬 후 syncTasks를 거쳐도 같은 탭 내부 순서를 유지한다', async () => {
+      const { useTaskStore } = await setupStore();
+      mockPlainNow('2025-03-01T12:00');
+
+      seedState(useTaskStore, [
+        makeSimpleTask({ id: 'tab1-0', tabId: 'tab-1', position: 0 }),
+        makeSimpleTask({ id: 'tab1-1', tabId: 'tab-1', position: 1 }),
+        makeSimpleTask({ id: 'tab1-2', tabId: 'tab-1', position: 2 }),
+        makeSimpleTask({ id: 'tab2-0', tabId: 'tab-2', position: 0 }),
+      ]);
+
+      useTaskStore.getState().reorderTasks('tab-1', ['tab1-1', 'tab1-2', 'tab1-0']);
+      useTaskStore.getState().syncTasks();
+
+      const tab1Tasks = useTaskStore
+        .getState()
+        .state.tasks.filter((task) => task.tabId === 'tab-1')
+        .sort((a, b) => a.position - b.position);
+
+      expect(tab1Tasks.map((task) => task.id)).toEqual(['tab1-1', 'tab1-2', 'tab1-0']);
+    });
+  });
+
   describe('toggleSimpleCheck', () => {
     it('미완료 -> 완료 시 completedAt과 updatedAt을 기록한다', async () => {
       const { useTaskStore } = await setupStore();

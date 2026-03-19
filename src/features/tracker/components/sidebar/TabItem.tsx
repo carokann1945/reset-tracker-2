@@ -39,10 +39,10 @@ export default function TabItem({ tab }: TabItemProps) {
           'py-[4px] pl-[10px]',
           'flex justify-between items-center',
           'rounded-md cursor-pointer',
-          'typo-1 text-start',
-          !isActive && 'hover:bg-gray-100',
-          isActive ? 'bg-accent-blue/10 text-accent-blue' : 'bg-white text-black',
-          isDragging && 'relative z-10 bg-white shadow-sm ring-1 ring-accent-blue/20',
+          'typo-1 text-start text-gray-100',
+          !isActive && 'hover:bg-accent-light/10',
+          isActive ? 'bg-accent-light/10' : 'bg-none',
+          isDragging && 'relative z-10 bg-accent-light/10 shadow-sm ring-1 ring-white',
         )}>
         <div className={cn('min-w-0 flex items-center gap-[6px]')}>
           <button
@@ -56,7 +56,7 @@ export default function TabItem({ tab }: TabItemProps) {
               'w-[18px] h-[18px]',
               'flex justify-center items-center shrink-0',
               'cursor-grab active:cursor-grabbing touch-none',
-              'text-gray-400',
+              'text-gray-300',
             )}>
             <GripVertical className={cn('w-[14px] h-[14px]')} />
           </button>

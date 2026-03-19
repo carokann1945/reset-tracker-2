@@ -18,7 +18,7 @@ export default function TabButton() {
           'w-[35px] h-[35px]',
           'rounded-md',
           'cursor-pointer',
-          'hover:bg-gray-200',
+          'hover:bg-gray-500',
           'transition-color duration-100',
         )}>
         +

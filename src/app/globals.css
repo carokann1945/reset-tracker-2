@@ -50,6 +50,12 @@
   /* 커스텀 색상 */
   --color-silver-custom: #f8f9fa;
   --color-accent-blue: #339af0;
+  --color-accent-blue: #0ea5e9;
+  --color-accent-hover: #0284c7;
+  --color-accent-light: #e0f2fe;
+  --color-black-text: #2c2c2c;
+  --color-sidebar-bg: #1a2b3d;
+
   --animate-blink-cursor: blink-cursor 1.2s step-end infinite;
   @keyframes blink-cursor {
     0%,

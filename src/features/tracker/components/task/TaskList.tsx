@@ -51,7 +51,7 @@ export default function TaskList() {
     return (
       <div
         className={cn(
-          'max-w-[1200px]',
+          'max-w-[1000px]',
           'rounded-xl border border-dashed border-gray-500 bg-white px-[20px] py-[32px]',
           'text-center text-gray-500',
           'mx-auto',
@@ -66,7 +66,7 @@ export default function TaskList() {
     return (
       <div
         className={cn(
-          'max-w-[1200px]',
+          'max-w-[1000px]',
           'rounded-xl border border-dashed border-gray-500 bg-white px-[20px] py-[32px]',
           'text-center text-gray-500',
           'mx-auto',

@@ -48,7 +48,7 @@ export default function TabList() {
     <div className={cn('pr-[15px]')}>
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext items={tabIds} strategy={verticalListSortingStrategy}>
-          <ul>
+          <ul className={cn('flex flex-col gap-[4px]')}>
             {tabs.map((tab) => (
               <TabItem key={tab.id} tab={tab} />
             ))}

@@ -55,6 +55,8 @@
   --color-accent-light: #e0f2fe;
   --color-black-text: #495057;
   --color-sidebar-bg: #1a2b3d;
+  --color-success: #51cf66;
+  --color-error: #ff6b6b;
 
   --animate-blink-cursor: blink-cursor 1.2s step-end infinite;
   @keyframes blink-cursor {

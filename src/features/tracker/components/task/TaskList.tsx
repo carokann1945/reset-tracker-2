@@ -94,7 +94,7 @@ export default function TaskList() {
             className={cn(
               'max-w-[1110px]',
               'flex flex-col gap-[8px]',
-              'rounded-xl shadow-xl bg-white px-[20px] py-[32px]',
+              'rounded-xl shadow-xl bg-white px-[30px] py-[32px]',
               'mx-auto',
             )}>
             {tasks.map((task) => (

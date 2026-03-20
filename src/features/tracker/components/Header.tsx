@@ -1,4 +1,4 @@
-import { PanelLeft, CalendarCheck } from 'lucide-react';
+import { PanelLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useSidebarStore } from '../model/sidebarStore';
 import { useTabStore, selectActiveTabName } from '../model/tabStore';

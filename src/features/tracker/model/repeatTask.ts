@@ -1,8 +1,8 @@
 import { Temporal } from '@js-temporal/polyfill';
-import type { RepeatTask } from './types';
+import type { RepeatTask, Task } from './types';
 
 // 헬퍼 함수 - 현재 날짜 (task에 저장된 timezone 맞춤형 계산을 위한 plain 날짜 생성)
-function getNow(timezone: string): Temporal.PlainDateTime {
+export function getNow(timezone: string): Temporal.PlainDateTime {
   if (timezone === 'plain') {
     return Temporal.Now.plainDateTimeISO();
   }
@@ -64,8 +64,13 @@ export function computeNextResetAt(task: RepeatTask, now = getNow(task.timezone)
 }
 
 // 완료 확인
-export function isAllCompleted(task: RepeatTask): boolean {
+export function isAllCompleted(task: Task): boolean {
   return task.checks.length > 0 && task.checks.every(Boolean);
+}
+
+// 완료 횟수 확인
+export function getCompletedCount(task: Task): number | undefined {
+  if (task.kind === 'repeat') return task.checks.filter(Boolean).length;
 }
 
 // 동기화 함수 - RepeatTask 전용 체크박스 해제 로직

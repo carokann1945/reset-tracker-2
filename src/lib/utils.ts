@@ -10,3 +10,11 @@ export function uid(): string {
   if (c && typeof c.randomUUID === 'function') return c.randomUUID();
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 }
+
+export type StopPropagationEvent = {
+  stopPropagation: () => void;
+};
+
+export function stopPropagation(event: StopPropagationEvent) {
+  event.stopPropagation();
+}

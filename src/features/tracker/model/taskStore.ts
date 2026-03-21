@@ -14,6 +14,7 @@ type TaskStore = {
   addTask: (tabId: string, draft: TaskDraft) => void;
   updateTask: (taskId: string, draft: TaskDraft) => void;
   deleteTask: (taskId: string) => void;
+  restoreTask: (task: Task) => void;
   deleteTasksByTab: (tabId: string) => void;
   toggleSimpleCheck: (taskId: string) => void;
   toggleRepeatCheck: (taskId: string, index: number) => void;
@@ -172,6 +173,12 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
     set((store) => ({
       state: { ...store.state, tasks: store.state.tasks.filter((t) => t.tabId !== tabId) },
     })),
+
+  restoreTask: (task) =>
+    set((store) => {
+      const tasks = [...store.state.tasks, task].sort((a, b) => a.position - b.position);
+      return { state: { ...store.state, tasks } };
+    }),
 
   toggleSimpleCheck: (taskId) =>
     set((store) => {

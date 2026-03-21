@@ -6,6 +6,7 @@ import { ChevronDown, ChevronUp, Pencil, Repeat2, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn, stopPropagation } from '@/lib/utils';
+import { useDeleteTask } from '../../hooks/useDeleteTask';
 import {
   isAllCompleted,
   getCompletedCount,
@@ -24,7 +25,6 @@ export default function TaskItem({ task }: { task: Task }) {
 
   const toggleSimpleCheck = useTaskStore((store) => store.toggleSimpleCheck);
   const toggleRepeatCheck = useTaskStore((store) => store.toggleRepeatCheck);
-  const deleteTask = useTaskStore((store) => store.deleteTask);
 
   // note 오픈 관리용 상태
   const [isNoteOpen, setIsNoteOpen] = useState(false);
@@ -35,6 +35,7 @@ export default function TaskItem({ task }: { task: Task }) {
   const nextResetLabel = task.kind === 'repeat' ? formatNextReset(task) : null;
   const completedAtLabel = formatCompletedAt(task.completedAt);
   const noteId = `task-note-${task.id}`;
+  const { handleDelete } = useDeleteTask();
 
   return (
     <li
@@ -154,7 +155,7 @@ export default function TaskItem({ task }: { task: Task }) {
               onKeyDown={stopPropagation}
               onClick={(e) => {
                 stopPropagation(e);
-                deleteTask(task.id);
+                handleDelete(task);
               }}
               className={cn('flex h-[18px] w-[18px] items-center justify-center text-gray-400 hover:text-gray-600')}>
               <Trash2 className={cn('h-[14px] w-[14px]')} />

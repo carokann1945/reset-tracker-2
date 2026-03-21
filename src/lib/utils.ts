@@ -18,3 +18,11 @@ export type StopPropagationEvent = {
 export function stopPropagation(event: StopPropagationEvent) {
   event.stopPropagation();
 }
+
+export function formatTwoDigit(value: number) {
+  return value.toString().padStart(2, '0');
+}
+
+export function getBrowserTimezone() {
+  return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+}

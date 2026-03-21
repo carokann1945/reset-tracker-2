@@ -69,3 +69,6 @@ export type TaskDraft =
       customIntervalDays?: number;
       targetCount: number;
     };
+
+// TaskDraft에서 intervalPreset만 추출
+export type IntervalPreset = Extract<TaskDraft, { kind: 'repeat' }>['intervalPreset'];

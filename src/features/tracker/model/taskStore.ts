@@ -25,6 +25,8 @@ const EMPTY_STATE: TaskState = {
   tasks: [],
 };
 
+const MAX_REPEAT_TARGET_COUNT = 10;
+
 // 헬퍼 함수 - 버전 검증, position으로 순서 정렬, task 동기화
 function normalizeState(saved: TaskState | null | undefined): TaskState {
   const origin = saved?.version === 1 ? saved : EMPTY_STATE;
@@ -32,6 +34,28 @@ function normalizeState(saved: TaskState | null | undefined): TaskState {
     .sort((a, b) => a.position - b.position)
     .map((task) => (task.kind === 'repeat' ? syncRepeatTask(task) : task));
   return { ...origin, tasks };
+}
+
+// 헬퍼 함수 - 반복 횟수 검증, 정상화
+function normalizeRepeatConfig(draft: Extract<TaskDraft, { kind: 'repeat' }>) {
+  const targetCountSource = draft.targetCount ?? 1;
+  const targetCount = Math.min(MAX_REPEAT_TARGET_COUNT, Math.max(1, Math.trunc(targetCountSource)));
+
+  if (draft.intervalPreset !== 'custom') {
+    return {
+      ...draft,
+      customIntervalDays: undefined,
+      targetCount,
+    };
+  }
+
+  const customIntervalSource = draft.customIntervalDays ?? 1;
+
+  return {
+    ...draft,
+    customIntervalDays: Math.max(1, Math.trunc(customIntervalSource)),
+    targetCount,
+  };
 }
 
 export const useTaskStore = create<TaskStore>((set, get) => ({
@@ -81,15 +105,16 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
       if (draft.kind === 'simple') {
         task = { ...base, kind: 'simple', checks: [false] };
       } else {
+        const normalizedDraft = normalizeRepeatConfig(draft);
         const raw: RepeatTask = {
           ...base,
           kind: 'repeat',
-          timezone: draft.timezone,
-          startAnchor: draft.startAnchor,
-          intervalPreset: draft.intervalPreset,
-          customIntervalDays: draft.customIntervalDays,
-          targetCount: draft.targetCount,
-          checks: Array(draft.targetCount).fill(false),
+          timezone: normalizedDraft.timezone,
+          startAnchor: normalizedDraft.startAnchor,
+          intervalPreset: normalizedDraft.intervalPreset,
+          customIntervalDays: normalizedDraft.customIntervalDays,
+          targetCount: normalizedDraft.targetCount,
+          checks: Array(normalizedDraft.targetCount).fill(false),
           lastCycle: 0,
         };
         task = syncRepeatTask(raw);
@@ -123,27 +148,29 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
         const checked = prev.kind === 'simple' ? prev.checks[0] : false;
         next = { ...base, kind: 'simple', checks: [checked], completedAt: checked ? prev.completedAt : undefined };
       } else {
+        const normalizedDraft = normalizeRepeatConfig(draft);
         const configChanged =
           prev.kind !== 'repeat' ||
-          prev.startAnchor !== draft.startAnchor ||
-          prev.timezone !== draft.timezone ||
-          prev.intervalPreset !== draft.intervalPreset ||
-          prev.customIntervalDays !== draft.customIntervalDays ||
-          prev.targetCount !== draft.targetCount;
+          prev.startAnchor !== normalizedDraft.startAnchor ||
+          prev.timezone !== normalizedDraft.timezone ||
+          prev.intervalPreset !== normalizedDraft.intervalPreset ||
+          prev.customIntervalDays !== normalizedDraft.customIntervalDays ||
+          prev.targetCount !== normalizedDraft.targetCount;
 
         // 수정사항이 없으면 기존 체크 상태와 lastCycle을 그대로, 아니라면 초기화
-        const checks = prev.kind === 'repeat' && !configChanged ? prev.checks : Array(draft.targetCount).fill(false);
+        const checks =
+          prev.kind === 'repeat' && !configChanged ? prev.checks : Array(normalizedDraft.targetCount).fill(false);
         const lastCycle = prev.kind === 'repeat' && !configChanged ? prev.lastCycle : 0;
         const completedAt = prev.kind === 'repeat' && !configChanged ? prev.completedAt : undefined;
 
         const raw: RepeatTask = {
           ...base,
           kind: 'repeat',
-          timezone: draft.timezone,
-          startAnchor: draft.startAnchor,
-          intervalPreset: draft.intervalPreset,
-          customIntervalDays: draft.customIntervalDays,
-          targetCount: draft.targetCount,
+          timezone: normalizedDraft.timezone,
+          startAnchor: normalizedDraft.startAnchor,
+          intervalPreset: normalizedDraft.intervalPreset,
+          customIntervalDays: normalizedDraft.customIntervalDays,
+          targetCount: normalizedDraft.targetCount,
           checks,
           lastCycle,
           completedAt,

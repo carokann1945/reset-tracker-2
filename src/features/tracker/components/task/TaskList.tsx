@@ -81,7 +81,7 @@ export default function TaskList() {
           <Image src="/images/checklist.png" alt="have no tasks image" sizes="400px" fill className="object-cover" />
         </figure>
         <p className={cn('typo-3 text-gray-700')}>아직 작업이 없습니다.</p>
-        <p className={cn('mt-[6px] text-sm')}>상단 +create 버튼으로 첫 작업을 추가해보세요.</p>
+        <p className={cn('mt-[6px] text-sm')}>상단 +추가 버튼으로 첫 작업을 추가해보세요.</p>
       </div>
     );
   }

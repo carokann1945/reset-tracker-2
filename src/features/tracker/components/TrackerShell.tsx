@@ -19,7 +19,7 @@ export default function TrackerShell() {
       <Sidebar />
       {isOpen && (
         <div
-          className="md:hidden fixed inset-0 bg-black/50 z-15 backdrop-blur-sm transition-opacity"
+          className="md:hidden fixed inset-0 bg-black/20 backdrop-blur-[2px] z-15 transition-opacity"
           onClick={() => setIsOpen(false)}
         />
       )}

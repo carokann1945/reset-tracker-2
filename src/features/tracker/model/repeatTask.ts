@@ -1,4 +1,5 @@
 import { Temporal } from '@js-temporal/polyfill';
+import { formatTwoDigit, getBrowserTimezone } from '@/lib/utils';
 import type { RepeatTask, Task } from './types';
 
 const DAY_OF_WEEK_LABELS = ['월', '화', '수', '목', '금', '토', '일'] as const;
@@ -11,11 +12,6 @@ function getNow(timezone: string): Temporal.PlainDateTime {
     return Temporal.Now.plainDateTimeISO();
   }
   return Temporal.Now.zonedDateTimeISO(timezone).toPlainDateTime();
-}
-
-// 한자리 숫자는 앞에 0을 붙여줌
-function formatTwoDigit(value: number) {
-  return value.toString().padStart(2, '0');
 }
 
 // D-day 계산 결과를 문자열로 반환
@@ -139,7 +135,7 @@ export function formatNextReset(task: RepeatTask) {
   const nextResetAt = computeNextResetAt(task);
 
   if (task.timezone !== 'plain') {
-    const localTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const localTimezone = getBrowserTimezone();
     const local = nextResetAt.toZonedDateTime(task.timezone).withTimeZone(localTimezone);
     const dayOfWeek = getWeekdayLabel(local.toPlainDateTime());
     const countdown = formatCountdown(
@@ -159,7 +155,7 @@ export function formatCompletedAt(completedAt?: string) {
   if (!completedAt) return '-';
 
   try {
-    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+    const timezone = getBrowserTimezone();
     const local = Temporal.Instant.from(completedAt).toZonedDateTimeISO(timezone);
 
     return `${formatTwoDigit(local.month)}/${formatTwoDigit(local.day)}`;

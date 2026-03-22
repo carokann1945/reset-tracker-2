@@ -12,8 +12,8 @@ const pretendard = localFont({
 });
 
 export const metadata: Metadata = {
-  title: 'Reset Tracker2',
-  description: '리팩토링',
+  title: 'Carokann',
+  description: '반복 작업 트래커',
 };
 
 export default function RootLayout({

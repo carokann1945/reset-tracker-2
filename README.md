@@ -9,7 +9,7 @@
 - 배포 링크: https://carokann.app
 - GitHub: https://github.com/carokann1945/carokann
 
-## 대표 이미지 또는 GIF
+## 대표 이미지
 
 <p align="center">
   <img src="./public/preview/desktop1.png" alt="Carokann 메인 화면 데스크톱 1" width="49%" />

@@ -15,14 +15,27 @@ export default function Header() {
 
   return (
     <>
+      {!isOpen && (
+        <div
+          className={cn(
+            'fixed top-[16px] left-[16px] z-20',
+            'w-[30px] h-[30px] rounded-md',
+            'flex justify-center items-center',
+            'cursor-pointer hover:bg-gray-100',
+            'transition-color duration-100',
+          )}
+          onClick={() => setIsOpen(!isOpen)}>
+          <PanelLeft className={cn('w-[20px] h-[20px] text-gray-700')} />
+        </div>
+      )}
       <header
         className={cn(
           'z-10 w-full max-w-[1200px] min-h-[70px]',
           'flex justify-between items-center gap-[8px]',
-          'px-[24px] pt-[24px] xl:px-[48px] xl:pt-[100px] mx-auto mb-[20px]',
+          'px-[24px] pt-[70px] xl:px-[48px] xl:pt-[100px] mx-auto mb-[20px]',
           'bg-silver-custom',
         )}>
-        <div
+        {/* <div
           className={cn(
             'w-[30px] h-[30px] rounded-md',
             'flex justify-center items-center',
@@ -32,7 +45,7 @@ export default function Header() {
           )}
           onClick={() => setIsOpen(!isOpen)}>
           <PanelLeft className={cn('w-[20px] h-[20px] text-gray-700')} />
-        </div>
+        </div> */}
         <h1 className={cn('typo-3 text-[24px] md:text-[32px] text-black-text')}>
           {activeTab?.name ?? '선택된 탭 없음'}
         </h1>

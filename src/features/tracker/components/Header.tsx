@@ -9,9 +9,9 @@ import TaskDialog from './task/TaskDialog';
 export default function Header() {
   const activeTabName = useTabStore(selectActiveTabName);
   const activeTabId = useTabStore((store) => store.state.activeTabId);
-  const addTask = useTaskStore((store) => store.addTask);
   const isOpen = useSidebarStore((store) => store.isOpen);
   const setIsOpen = useSidebarStore((store) => store.setIsOpen);
+  const addTask = useTaskStore((store) => store.addTask);
   const [taskDialogOpen, setTaskDialogOpen] = useState(false);
 
   return (

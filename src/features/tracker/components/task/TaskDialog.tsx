@@ -1,7 +1,7 @@
 import { Temporal } from '@js-temporal/polyfill';
 import { ChevronDown, CircleHelp, X } from 'lucide-react';
 import { Dialog as DialogPrimitive } from 'radix-ui';
-import { useRef, useState, type ChangeEvent, type FormEvent } from 'react';
+import { useRef, useState, type ChangeEvent, SubmitEventHandler } from 'react';
 import { cn, getBrowserTimezone } from '@/lib/utils';
 import type { TaskDraft, IntervalPreset } from '../../model/types';
 
@@ -14,6 +14,15 @@ type TaskDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (draft: TaskDraft) => void;
+  mode?: 'add' | 'update';
+  defaultKind?: string;
+  defaultTitle?: string;
+  defaultNote?: string;
+  defaultStartAnchor?: string;
+  defaultTimezone?: string;
+  defaultIntervalPreset?: string;
+  defaultCustomIntervalDays?: string;
+  defaultTargetCount?: string;
 };
 
 type TaskFormState = {
@@ -170,20 +179,73 @@ function SegmentedButtonGroup<T extends string>({
 }
 
 // 메인 컴포넌트
-export default function TaskDialog({ open, onOpenChange, onSubmit }: TaskDialogProps) {
-  const [formState, setFormState] = useState(createInitialFormState);
+export default function TaskDialog({
+  open,
+  onOpenChange,
+  onSubmit,
+  mode = 'add',
+  defaultKind,
+  defaultTitle,
+  defaultNote,
+  defaultStartAnchor,
+  defaultTimezone,
+  defaultIntervalPreset,
+  defaultCustomIntervalDays,
+  defaultTargetCount,
+}: TaskDialogProps) {
+  const [formState, setFormState] = useState(() => {
+    const base = createInitialFormState();
+    let startDate = base.startDate;
+    let startTime = base.startTime;
+    if (defaultStartAnchor) {
+      const [d, t] = defaultStartAnchor.split('T');
+      startDate = d ?? base.startDate;
+      startTime = t?.slice(0, 5) ?? base.startTime;
+    }
+
+    return {
+      ...base,
+      kind: (defaultKind as TaskFormState['kind']) ?? base.kind,
+      title: defaultTitle ?? base.title,
+      note: defaultNote ?? base.note,
+      startDate,
+      startTime,
+      timezone: defaultTimezone ?? base.timezone,
+      intervalPreset: (defaultIntervalPreset as IntervalPreset) ?? base.intervalPreset,
+      customIntervalDays: defaultCustomIntervalDays ?? base.customIntervalDays,
+      targetCount: defaultTargetCount ?? base.targetCount,
+    };
+  });
+
+  const isEditMode = mode;
+  const dialogTitle = isEditMode === 'update' ? '작업 수정' : '새 작업';
+  const submitLabel = isEditMode === 'update' ? '저장' : '추가';
+  const dialogDescription =
+    isEditMode === 'update' ? '작업을 수정하는 다이얼로그입니다.' : '새 작업을 추가하는 다이얼로그입니다.';
+
   const [browserTimezone] = useState(getBrowserTimezone);
   const titleInputRef = useRef<HTMLInputElement>(null);
   const draft = buildTaskDraft(formState);
   const isRepeat = formState.kind === 'repeat';
   const showCustomIntervalInput = isRepeat && formState.intervalPreset === 'custom';
+
   // 타임존 선택 옵션. browserTimezone 가져올때 에러나면 plain으로 적용시킴
-  const timezoneOptions = [
-    { label: 'Plain (표준 시간대 없음)', value: 'plain' },
-    browserTimezone && browserTimezone !== 'plain'
-      ? { label: browserTimezone, value: browserTimezone }
-      : { label: '에러', value: 'plain' },
-  ];
+  const timezoneOptions = (() => {
+    const options = [{ label: 'Plain (표준 시간대 없음)', value: 'plain' }];
+
+    if (browserTimezone && browserTimezone !== 'plain') {
+      options.push({ label: browserTimezone, value: browserTimezone });
+    } else {
+      options.push({ label: '에러', value: 'plain' });
+    }
+
+    const current = formState.timezone;
+    if (current && current !== 'plain' && current !== browserTimezone) {
+      options.push({ label: current, value: current });
+    }
+
+    return options;
+  })();
 
   const handleOpenChange = (nextOpen: boolean) => {
     onOpenChange(nextOpen);
@@ -219,8 +281,8 @@ export default function TaskDialog({ open, onOpenChange, onSubmit }: TaskDialogP
     updateField('customIntervalDays', String(Math.max(1, parsed ?? 1)));
   };
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const handleSubmit: SubmitEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
 
     if (!draft) return;
 
@@ -251,13 +313,11 @@ export default function TaskDialog({ open, onOpenChange, onSubmit }: TaskDialogP
             'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
             'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
           )}>
-          <DialogPrimitive.Description className="sr-only">
-            새 작업을 추가하는 다이얼로그입니다.
-          </DialogPrimitive.Description>
+          <DialogPrimitive.Description className="sr-only">{dialogDescription}</DialogPrimitive.Description>
           <form onSubmit={handleSubmit} className={cn('flex flex-col gap-[12px] sm:gap-[24px]')}>
             <div className={cn('flex items-center justify-between gap-[16px]')}>
               <DialogPrimitive.Title className={cn('pt-[4px] text-[18px] sm:text-[20px] font-[900] text-black-text')}>
-                새 작업
+                {dialogTitle}
               </DialogPrimitive.Title>
               <DialogPrimitive.Close asChild>
                 <button
@@ -442,7 +502,7 @@ export default function TaskDialog({ open, onOpenChange, onSubmit }: TaskDialogP
                   'hover:bg-[#ebe4d6] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-blue/30',
                   'disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:bg-[#f3f0e7]',
                 )}>
-                추가
+                {submitLabel}
               </button>
             </div>
           </form>

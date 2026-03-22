@@ -49,7 +49,7 @@ export default function TaskItem({ task }: { task: Task }) {
       <li
         ref={setNodeRef}
         style={{
-          transform: CSS.Transform.toString(transform),
+          transform: CSS.Translate.toString(transform),
           transition,
         }}
         className={cn(

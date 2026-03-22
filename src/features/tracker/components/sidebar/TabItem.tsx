@@ -33,7 +33,7 @@ export default function TabItem({ tab }: TabItemProps) {
         onClick={() => handleTabSelect(tab.id)}
         ref={setNodeRef}
         style={{
-          transform: CSS.Transform.toString(transform),
+          transform: CSS.Translate.toString(transform),
           transition,
         }}
         className={cn(

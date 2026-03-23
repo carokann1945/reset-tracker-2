@@ -2,13 +2,14 @@
 
 import { create } from 'zustand';
 import { uid } from '@/lib/utils';
-import { loadState } from './tabStorage';
+import { EMPTY_TAB_STATE } from './persistence';
 import type { TabState, Tab } from './types';
 
 type TabStore = {
   state: TabState;
   hydrated: boolean;
-  hydrate: () => void;
+  hydrate: (saved: TabState | null) => void;
+  resetState: () => void;
   addTab: (name: string) => void;
   renameTab: (tabId: string, name: string) => void;
   deleteTab: (tabId: string) => void;
@@ -17,15 +18,9 @@ type TabStore = {
   setActiveTab: (tabId: string | null) => void;
 };
 
-const EMPTY_STATE: TabState = {
-  version: 1,
-  tabs: [],
-  activeTabId: null,
-};
-
 // 헬퍼 함수 - 버전 검증, position으로 정렬, 활성화된 탭 유효성 체크
 function normalizeState(saved: TabState | null | undefined): TabState {
-  const validated = saved && saved.version === 1 ? saved : EMPTY_STATE;
+  const validated = saved && saved.version === 1 ? saved : EMPTY_TAB_STATE;
   const sorted = [...validated.tabs].sort((a, b) => a.position - b.position);
   const activeTabId =
     validated.activeTabId === null
@@ -47,13 +42,22 @@ export const selectActiveTab = (store: TabStore) =>
 // 일반 함수 - 액티브 탭 이름 반환
 export const selectActiveTabName = (store: TabStore) => selectActiveTab(store)?.name ?? '선택된 탭 없음';
 
-export const useTabStore = create<TabStore>((set, get) => ({
-  state: EMPTY_STATE,
+export const useTabStore = create<TabStore>((set) => ({
+  state: EMPTY_TAB_STATE,
   hydrated: false,
 
-  hydrate: () => {
-    if (get().hydrated) return;
-    set({ state: normalizeState(loadState()), hydrated: true });
+  hydrate: (saved) => {
+    set({
+      state: normalizeState(saved),
+      hydrated: true,
+    });
+  },
+
+  resetState: () => {
+    set({
+      state: EMPTY_TAB_STATE,
+      hydrated: false,
+    });
   },
 
   addTab: (name) =>

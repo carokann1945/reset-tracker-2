@@ -1,14 +1,15 @@
 import { Temporal } from '@js-temporal/polyfill';
 import { create } from 'zustand';
 import { uid } from '@/lib/utils';
+import { EMPTY_TASK_STATE } from './persistence';
 import { syncRepeatTask } from './repeatTask';
-import { loadTaskState } from './taskStorage';
 import type { TaskState, Task, RepeatTask, TaskDraft } from './types';
 
 type TaskStore = {
   state: TaskState;
   hydrated: boolean;
-  hydrate: () => void;
+  hydrate: (saved: TaskState | null) => void;
+  resetState: () => void;
   syncTasks: () => void;
   reorderTasks: (tabId: string, orderedIds: string[]) => void;
   addTask: (tabId: string, draft: TaskDraft) => void;
@@ -21,16 +22,11 @@ type TaskStore = {
   toggleRepeatCheck: (taskId: string, index: number) => void;
 };
 
-const EMPTY_STATE: TaskState = {
-  version: 1,
-  tasks: [],
-};
-
 const MAX_REPEAT_TARGET_COUNT = 10;
 
 // 헬퍼 함수 - 버전 검증, position으로 순서 정렬, task 동기화
 function normalizeState(saved: TaskState | null | undefined): TaskState {
-  const origin = saved?.version === 1 ? saved : EMPTY_STATE;
+  const origin = saved?.version === 1 ? saved : EMPTY_TASK_STATE;
   const tasks = [...origin.tasks]
     .sort((a, b) => a.position - b.position)
     .map((task) => (task.kind === 'repeat' ? syncRepeatTask(task) : task));
@@ -59,13 +55,22 @@ function normalizeRepeatConfig(draft: Extract<TaskDraft, { kind: 'repeat' }>) {
   };
 }
 
-export const useTaskStore = create<TaskStore>((set, get) => ({
-  state: EMPTY_STATE,
+export const useTaskStore = create<TaskStore>((set) => ({
+  state: EMPTY_TASK_STATE,
   hydrated: false,
 
-  hydrate: () => {
-    if (get().hydrated) return;
-    set({ state: normalizeState(loadTaskState()), hydrated: true });
+  hydrate: (saved) => {
+    set({
+      state: normalizeState(saved),
+      hydrated: true,
+    });
+  },
+
+  resetState: () => {
+    set({
+      state: EMPTY_TASK_STATE,
+      hydrated: false,
+    });
   },
 
   syncTasks: () => set((store) => ({ state: normalizeState(store.state) })),

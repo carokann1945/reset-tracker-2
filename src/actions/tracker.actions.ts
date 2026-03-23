@@ -21,6 +21,9 @@ export async function bootstrapTracker(localSnapshot: TrackerSnapshotPayload): P
     data: { user },
   } = await supabase.auth.getUser();
 
+  console.log('bootstrapTracker user:', user?.id);
+  console.log('bootstrapTracker auth error:', Error);
+
   if (!user) {
     return {
       mode: 'local',

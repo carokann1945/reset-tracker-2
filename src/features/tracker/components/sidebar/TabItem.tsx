@@ -37,8 +37,8 @@ export default function TabItem({ tab }: TabItemProps) {
           transition,
         }}
         className={cn(
-          'group w-full max-w-[255px]',
-          'py-[2px] pl-[6px]',
+          'group w-full max-w-[275px]',
+          'py-[3px] px-[5px]',
           'flex justify-between items-center',
           'rounded-md cursor-pointer',
           'typo-1 text-start text-gray-100',

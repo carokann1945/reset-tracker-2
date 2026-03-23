@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn, stopPropagation } from '@/lib/utils';
 import { useDeleteTask } from '../../hooks/useDeleteTask';
+import { useSoundEffect } from '../../hooks/useSoundEffect';
 import {
   isAllCompleted,
   getCompletedCount,
@@ -43,6 +44,8 @@ export default function TaskItem({ task }: { task: Task }) {
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-blue/30',
     'sm:h-auto sm:w-auto sm:gap-[6px] sm:px-[10px] sm:py-[6px]',
   );
+
+  const playCheck = useSoundEffect('/sounds/mouse-click.mp3');
 
   return (
     <>
@@ -134,7 +137,10 @@ export default function TaskItem({ task }: { task: Task }) {
               {task.kind === 'simple' ? (
                 <Checkbox
                   checked={task.checks[0]}
-                  onCheckedChange={() => toggleSimpleCheck(task.id)}
+                  onCheckedChange={(checked) => {
+                    if (checked) playCheck();
+                    toggleSimpleCheck(task.id);
+                  }}
                   aria-label={`${task.title} 완료 여부`}
                   onPointerDown={stopPropagation}
                   onKeyDown={stopPropagation}
@@ -148,7 +154,10 @@ export default function TaskItem({ task }: { task: Task }) {
                   <Checkbox
                     key={`${task.id}-check-${index}`}
                     checked={checked}
-                    onCheckedChange={() => toggleRepeatCheck(task.id, index)}
+                    onCheckedChange={(checked) => {
+                      if (checked) playCheck();
+                      toggleRepeatCheck(task.id, index);
+                    }}
                     aria-label={`${task.title} ${index + 1}번째 체크`}
                     onPointerDown={stopPropagation}
                     onKeyDown={stopPropagation}

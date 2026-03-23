@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <g transform="translate(0,4)" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M32 8L52 18L32 28L12 18Z"/>
-    <path d="M12 18V40L32 52V28"/>
-    <path d="M52 18V40L32 52"/>
-    <path d="M32 28V52"/>
-  </g>
-</svg>

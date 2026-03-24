@@ -17,6 +17,8 @@ export default function Sidebar() {
   const isMounted = useSidebarStore((store) => store.isMounted);
   const [profile, setProfile] = useState<Awaited<ReturnType<typeof getProfile>>>(null);
 
+  const finishClosing = useSidebarStore((store) => store.finishClosing);
+
   const handleSignOut = async () => {
     const supabase = createClient();
 
@@ -38,6 +40,10 @@ export default function Sidebar() {
 
   return (
     <aside
+      onTransitionEnd={(event) => {
+        if (event.target !== event.currentTarget) return;
+        if (!isOpen) finishClosing();
+      }}
       className={cn(
         'z-20 w-[300px] h-screen',
         'flex flex-col',
@@ -57,11 +63,11 @@ export default function Sidebar() {
           className={cn(
             'w-[30px] h-[30px] rounded-md',
             'flex justify-center items-center',
-            'cursor-pointer hover:bg-gray-600',
+            'cursor-pointer hover:bg-custom-sidebar-hover',
             'transition-color duration-100',
           )}
-          onClick={() => setIsOpen(!isOpen)}>
-          <PanelLeft className={cn('w-[20px] h-[20px] text-white')} />
+          onClick={() => setIsOpen(false)}>
+          <PanelLeft className={cn('w-[20px] h-[20px] text-custom-black-light')} />
         </div>
       </div>
       {/* 탭 추가 */}
@@ -113,8 +119,6 @@ export default function Sidebar() {
           )}
 
           <div className={cn('flex flex-col gap-[6px]', 'typo-common text-custom-black-light')}>
-            {/* <span className={cn('text-[14px]')}>비로그인 상태</span>
-            <span className={cn('text-[12px] text-gray-400')}>무료 요금제</span> */}
             {profile ? (
               <>
                 <span className={cn('text-[14px]')}>{profile.name ?? profile.email}</span>

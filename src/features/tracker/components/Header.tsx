@@ -16,20 +16,25 @@ export default function Header() {
   const isReady = tabHydrated && taskHydrated;
   const [taskDialogOpen, setTaskDialogOpen] = useState(false);
 
+  const isMounted = useSidebarStore((store) => store.isMounted);
+  const isClosing = useSidebarStore((store) => store.isClosing);
+  const shouldShowPanelLeft = isMounted && !isOpen && !isClosing;
+
   return (
     <>
-      {!isOpen && (
-        <div
+      {shouldShowPanelLeft && (
+        <button
+          type="button"
           className={cn(
             'fixed top-[16px] left-[16px] z-20',
             'w-[30px] h-[30px] rounded-md',
             'flex justify-center items-center',
             'cursor-pointer hover:bg-gray-100',
-            'transition-color duration-100',
+            'transition-colors duration-100',
           )}
-          onClick={() => setIsOpen(!isOpen)}>
+          onClick={() => setIsOpen(true)}>
           <PanelLeft className={cn('w-[20px] h-[20px] text-gray-700')} />
-        </div>
+        </button>
       )}
       <header
         className={cn(

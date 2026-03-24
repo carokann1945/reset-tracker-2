@@ -26,7 +26,6 @@ model TrackerSnapshot {
   userId               String   @unique
   tabState             Json
   taskState            Json
-  migrationCompletedAt DateTime?
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
 }

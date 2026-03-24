@@ -1,21 +1,11 @@
 'use client';
 
-import { motion } from 'motion/react';
 import { cn } from '@/lib/utils';
 import { useResponsiveSidebar } from '../hooks/useResponsiveSidebar';
 import { useSidebarStore } from '../model/sidebarStore';
 import Header from './Header';
 import Sidebar from './sidebar/Sidebar';
 import TaskList from './task/TaskList';
-
-const variants = {
-  enter: {
-    opacity: 0,
-  },
-  visible: {
-    opacity: 1,
-  },
-};
 
 export default function TrackerShell() {
   useResponsiveSidebar();
@@ -25,12 +15,7 @@ export default function TrackerShell() {
   if (!isMounted) return null;
 
   return (
-    <motion.div
-      key="result"
-      variants={variants}
-      initial="enter"
-      animate="visible"
-      transition={{ duration: 0.2, ease: 'easeInOut' }}>
+    <>
       <div className={cn('w-full min-h-dvh', 'flex')}>
         <Sidebar />
         {isOpen && (
@@ -52,6 +37,6 @@ export default function TrackerShell() {
           </main>
         </div>
       </div>
-    </motion.div>
+    </>
   );
 }

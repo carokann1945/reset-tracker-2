@@ -13,7 +13,8 @@ const pretendard = localFont({
 
 export const metadata: Metadata = {
   title: 'Carokann',
-  description: '반복 작업 트래커',
+  description:
+    '탭별로 루틴과 반복 작업을 정리하고, 매일·매주·매월·매년 혹은 커스텀 주기에 맞춰 자동으로 다시 시작하는 개인용 작업 리셋 트래커.',
 };
 
 export default function RootLayout({

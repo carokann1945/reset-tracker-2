@@ -230,7 +230,7 @@ export default function TrackerPersistenceProvider({ children }: { children: Rea
     };
   }, [bootstrapped]);
 
-  if (!bootstrapped) return null;
+  // if (!bootstrapped) return null;
 
   return <>{children}</>;
 }

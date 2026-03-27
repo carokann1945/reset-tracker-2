@@ -1,4 +1,4 @@
-import { PanelLeft, CircleUser, LogIn, LogOut, FolderOpen } from 'lucide-react';
+import { CircleUser, LogIn, LogOut, FolderOpen } from 'lucide-react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -12,7 +12,6 @@ import TabList from './TabList';
 
 export default function Sidebar() {
   const isOpen = useSidebarStore((store) => store.isOpen);
-  const setIsOpen = useSidebarStore((store) => store.setIsOpen);
   const router = useRouter();
   const isMounted = useSidebarStore((store) => store.isMounted);
   const [profile, setProfile] = useState<Awaited<ReturnType<typeof getProfile>>>(null);
@@ -58,16 +57,6 @@ export default function Sidebar() {
           className={cn('w-[120px]', 'flex items-center gap-[8px]', 'cursor-pointer')}
           onClick={() => window.location.reload()}>
           <h1 className={cn('typo-second')}>Carokann</h1>
-        </div>
-        <div
-          className={cn(
-            'w-[30px] h-[30px] rounded-md',
-            'flex justify-center items-center',
-            'cursor-pointer hover:bg-custom-sidebar-hover',
-            'transition-color duration-100',
-          )}
-          onClick={() => setIsOpen(false)}>
-          <PanelLeft className={cn('w-[20px] h-[20px] text-custom-black-light')} />
         </div>
       </div>
       {/* 탭 추가 */}

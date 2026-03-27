@@ -1,41 +1,19 @@
-import { PanelLeft } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { useSidebarStore } from '../model/sidebarStore';
 import { useTabStore, selectActiveTab } from '../model/tabStore';
 import { useTaskStore } from '../model/taskStore';
 import TaskDialog from './task/TaskDialog';
 
 export default function Header() {
   const activeTab = useTabStore(selectActiveTab);
-  const isOpen = useSidebarStore((store) => store.isOpen);
-  const setIsOpen = useSidebarStore((store) => store.setIsOpen);
   const addTask = useTaskStore((store) => store.addTask);
   const tabHydrated = useTabStore((store) => store.hydrated);
   const taskHydrated = useTaskStore((store) => store.hydrated);
   const isReady = tabHydrated && taskHydrated;
   const [taskDialogOpen, setTaskDialogOpen] = useState(false);
 
-  const isMounted = useSidebarStore((store) => store.isMounted);
-  const isClosing = useSidebarStore((store) => store.isClosing);
-  const shouldShowPanelLeft = isMounted && !isOpen && !isClosing;
-
   return (
     <>
-      {shouldShowPanelLeft && (
-        <button
-          type="button"
-          className={cn(
-            'fixed top-[16px] left-[16px] z-20',
-            'w-[30px] h-[30px] rounded-md',
-            'flex justify-center items-center',
-            'cursor-pointer hover:bg-gray-100',
-            'transition-colors duration-100',
-          )}
-          onClick={() => setIsOpen(true)}>
-          <PanelLeft className={cn('w-[20px] h-[20px] text-gray-700')} />
-        </button>
-      )}
       <header
         className={cn(
           'z-10 w-full max-w-[1200px] min-h-[70px]',

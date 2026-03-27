@@ -1,5 +1,6 @@
 'use client';
 
+import { PanelLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useResponsiveSidebar } from '../hooks/useResponsiveSidebar';
 import { useSidebarStore } from '../model/sidebarStore';
@@ -36,6 +37,22 @@ export default function TrackerShell() {
           </main>
         </div>
       </div>
+      {/* 사이드바 토글 버튼 */}
+      {isMounted && (
+        <button
+          type="button"
+          className={cn(
+            'fixed top-[16px] z-30',
+            'w-[30px] h-[30px] rounded-md',
+            'flex justify-center items-center',
+            'cursor-pointer hover:bg-gray-200/50',
+            'transition-[left] duration-300 ease-in-out',
+          )}
+          style={{ left: isOpen ? '255px' : '16px' }}
+          onClick={() => setIsOpen(!isOpen)}>
+          <PanelLeft className={cn('w-[20px] h-[20px] text-custom-black-light')} />
+        </button>
+      )}
     </>
   );
 }

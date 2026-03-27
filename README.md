@@ -1,22 +1,20 @@
-<h1 align="center">Carokann</h1>
+<h2 align="center">Carokann</h2>
 
 <div align="center">
   <p>Carokann은 탭 단위로 루틴과 반복 작업을 정리하고, 주기와 시간 기준에 따라 작업을 자동으로 다시 시작할 수 있게 만든 개인용 작업 리셋 트래커입니다.</p>
-  
+
   <p>비회원으로도 사용 가능하며, 최초 로그인 시 데이터가 이관됩니다.</p>
 <div>
-
-## 배포 링크 / GitHub
-
-- 배포 링크: https://carokann.app
-- GitHub: https://github.com/carokann1945/carokann
-
-## 대표 이미지
 
 <p align="center">
   <img src="./public/preview/desktop1.png" alt="Carokann 메인 화면 데스크톱 1" width="49%" />
   <img src="./public/preview/desktop2.png" alt="Carokann 메인 화면 데스크톱 2" width="49%" />
 </p>
+
+## 배포 링크 / GitHub
+
+- 배포 링크: https://carokann.app
+- GitHub: https://github.com/carokann1945/carokann
 
 ## 주요 기능
 

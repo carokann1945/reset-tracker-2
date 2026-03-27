@@ -29,20 +29,26 @@ pnpm type-check    # TypeScript 타입 검사 (tsc --noEmit)
 
 ## Project Structure
 
+feature 기반 구조
+
 ```
-app/
-├── layout.tsx          # Root layout (html + body 태그 필수)
-├── page.tsx            # 홈 페이지
-├── globals.css         # 전역 스타일 — Tailwind import
-├── (routes)/
-│   └── [slug]/
-│       └── page.tsx
-components/
-├── ui/                 # 재사용 가능한 UI 원자 컴포넌트
-└── [feature]/          # 기능별 컴포넌트
-lib/                    # 유틸리티, 헬퍼, 공유 로직
-types/                  # 공유 TypeScript 타입
-public/                 # 정적 에셋
+src
+├─ actions
+├─ app
+│  ├─ (auth)
+│  ├─ (domain)
+│  ├─ globals.css
+│  └─ layout.tsx
+├─ features
+│  └─ tracker
+│     ├─ components
+│     │  ├─ sidebar
+│     │  └─ task
+│     ├─ hooks
+│     └─ model
+├─ lib/
+├─ types/
+└─ public/
 ```
 
 ## TypeScript
@@ -93,6 +99,16 @@ export default {
   plugins: { '@tailwindcss/postcss': {} },
 };
 ```
+
+클래스명 작성 규칙 (cn 유틸리티 및 순서)
+Tailwind 클래스는 충돌 방지와 조건부 스타일링을 위해 cn 유틸리티(clsx + tailwind-merge)를 사용하여 작성하며, 일관성과 가독성을 위해 다음 순서를 엄격히 따릅니다.
+크기 (너비/높이): w-full, max-w-md, h-10, min-h-screen
+여백 (패딩/마진): p-4, px-2, m-4, mt-2, gap-4
+레이아웃 (플렉스/그리드): flex, flex-col, grid, items-center, justify-between
+위치 및 계층: relative, absolute, fixed, top-0, z-10
+시각적 요소 (색상, 타이포그래피, 테두리): bg-white, text-sm, font-bold, border, rounded-md, shadow-sm
+애니메이션 및 전환 효과: transition-all, duration-300, animate-in
+조건부 클래스: 컴포넌트의 상태(props, state)에 따라 동적으로 부여되는 클래스
 
 ## Next.js App Router
 

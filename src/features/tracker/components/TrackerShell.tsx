@@ -45,7 +45,7 @@ export default function TrackerShell() {
             'fixed top-[16px] z-30',
             'w-[30px] h-[30px] rounded-md',
             'flex justify-center items-center',
-            'cursor-pointer hover:bg-gray-200/50',
+            'cursor-pointer hover:bg-gray-200/50 bg-custom-main-bg',
             'transition-[left] duration-300 ease-in-out',
           )}
           style={{ left: isOpen ? '255px' : '16px' }}

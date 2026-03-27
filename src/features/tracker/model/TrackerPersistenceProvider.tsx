@@ -1,5 +1,6 @@
 'use client';
 
+import { AuthChangeEvent, Session } from '@supabase/supabase-js';
 import { isEqual } from 'es-toolkit';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { bootstrapTracker, saveTrackerSnapshot } from '@/actions/tracker.actions';
@@ -39,6 +40,7 @@ export default function TrackerPersistenceProvider({ children }: { children: Rea
   // 초기 저장 여부를 결정하기 위한 원본 snapshot
   const originalSnapshotRef = useRef<TrackerSnapshotPayload | null>(null);
   const didHandleInitialHydrateRef = useRef(false);
+  const currentUserIdRef = useRef<string | null>(null);
 
   function isSameSnapshot(a: TrackerSnapshotPayload, b: TrackerSnapshotPayload | null) {
     if (!b) return false;
@@ -105,15 +107,28 @@ export default function TrackerPersistenceProvider({ children }: { children: Rea
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((event: string) => {
-      if (event === 'SIGNED_IN' || event === 'SIGNED_OUT') {
-        // UI 깜빡임 방지를 위한 조치
-        tabDehydrate();
-        taskDehydrate();
-        // 인증 상태가 바뀌면 bootstrap
-        setBootstrapped(false);
-        setAuthVersion((v) => v + 1);
+    } = supabase.auth.onAuthStateChange((event: AuthChangeEvent, session: Session | null) => {
+      if (event === 'INITIAL_SESSION') {
+        // 초기 세션 감지 - ref만 업데이트, 리부트스트랩은 authVersion=0이 처리
+        currentUserIdRef.current = session?.user.id ?? null;
+        return;
       }
+
+      if (event === 'SIGNED_IN') {
+        const newUserId = session?.user.id ?? null;
+        // 같은 유저의 토큰 갱신 → 리부트스트랩 불필요 (로딩 없음)
+        if (newUserId !== null && newUserId === currentUserIdRef.current) return;
+        currentUserIdRef.current = newUserId;
+      } else if (event === 'SIGNED_OUT') {
+        currentUserIdRef.current = null;
+      } else {
+        return; // TOKEN_REFRESHED, USER_UPDATED 등 무시
+      }
+
+      tabDehydrate();
+      taskDehydrate();
+      setBootstrapped(false);
+      setAuthVersion((v) => v + 1);
     });
 
     return () => {
